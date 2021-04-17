@@ -8,7 +8,7 @@
         findings (function/find-fn-usage code spec)]
     (when (seq findings)
       (assoc {} :dependency 'clojure.core
-                :findings findings))))
+             :findings findings))))
 (comment
   (require '[inspector-gadget.diplomat.file :as file])
   (def code "(ns banana (:require [clojure.java.shell :as shell]))

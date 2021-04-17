@@ -1,8 +1,8 @@
 (ns inspector-gadget.rules.shell-injection
-  (:require [inspector-gadget.logic.namespace :as namespace]
+  (:require [clojure.spec.alpha :as s]
+            [inspector-gadget.diplomat.file :as file]
             [inspector-gadget.logic.function :as function]
-            [clojure.spec.alpha :as s]
-            [inspector-gadget.diplomat.file :as file]))
+            [inspector-gadget.logic.namespace :as namespace]))
 
 (defn build-fn-usage-spec [namespaced-fn]
   (s/* (s/cat :before (s/* any?)
@@ -18,7 +18,7 @@
           spec (build-fn-usage-spec function)
           findings (function/find-fn-usage code spec)]
       (assoc {} :dependency dependency
-                :findings findings))))
+             :findings findings))))
 
 (comment
   (require '[inspector-gadget.diplomat.file :as file])

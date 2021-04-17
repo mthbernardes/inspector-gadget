@@ -1,7 +1,7 @@
 (ns leiningen.inspector-gadget
   (:require [inspector-gadget.core :as inspector-gadget]
-            [leiningen.core.project :as project]
-            [leiningen.core.eval :as eval]))
+            [leiningen.core.eval :as eval]
+            [leiningen.core.project :as project]))
 
 (defn- inspector-gadget-version [{:keys [plugins]}]
   (some (fn [[plugin-name version]]
@@ -17,6 +17,6 @@
   [{:keys [source-paths], :as project}]
   (println "Scanning code for vulnerabilities...")
   (eval/eval-in-project
-    (add-docstring-checker-dep project)
-    `(inspector-gadget/main ~(vec source-paths))
-    '(require 'inspector-gadget.core)))
+   (add-docstring-checker-dep project)
+   `(inspector-gadget/main ~(vec source-paths))
+   '(require 'inspector-gadget.core)))

@@ -1,8 +1,8 @@
 (ns inspector-gadget.core
-  (:require [inspector-gadget.rules.xxe :as rule.xxe]
+  (:require [inspector-gadget.diplomat.file :as file]
             [inspector-gadget.rules.read-string :as rule.read-string]
             [inspector-gadget.rules.shell-injection :as rule.shell-injection]
-            [inspector-gadget.diplomat.file :as file]))
+            [inspector-gadget.rules.xxe :as rule.xxe]))
 
 (defn execute-rules [file]
   (println (str "Searching vulnerabilities on file: " (str file)))

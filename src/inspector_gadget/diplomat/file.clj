@@ -1,8 +1,8 @@
 (ns inspector-gadget.diplomat.file
-  (:require [sci.core :as sci]
+  (:require [clojure.java.io :as io]
+            [clojure.string :as string]
             [edamame.core :as edamame]
-            [clojure.java.io :as io]
-            [clojure.string :as string]))
+            [sci.core :as sci]))
 
 (defn ^:private init []
   (sci/init {:load-fn  (fn [_] "")

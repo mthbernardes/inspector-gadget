@@ -1,6 +1,6 @@
 (ns inspector-gadget.rules.xxe
-  (:require [inspector-gadget.logic.namespace :as namespace]
-            [inspector-gadget.logic.function :as function]))
+  (:require [inspector-gadget.logic.function :as function]
+            [inspector-gadget.logic.namespace :as namespace]))
 
 (defn detect [code]
   "Detect usage of vulnerable XML parser."
@@ -9,7 +9,7 @@
           spec (function/build-fn-usage-spec function)
           findings (function/find-fn-usage code spec)]
       (assoc {} :dependency dependency
-                :findings findings))))
+             :findings findings))))
 
 (comment
   (require '[inspector-gadget.diplomat.file :as file])
