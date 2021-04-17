@@ -19,3 +19,4 @@ Execute it on your project directory.
 ## Vulnerabilities
 - XXE using clojure.xml/parse
 - RCE using clojure.core/read-string
+- RCE using "bash -c" on clojure.java.shell/sh
