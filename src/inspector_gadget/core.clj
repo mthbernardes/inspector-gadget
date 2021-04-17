@@ -1,5 +1,6 @@
 (ns inspector-gadget.core
-  (:require [inspector-gadget.diplomat.file :as file]
+  (:require [clojure.pprint :as pprint]
+            [inspector-gadget.diplomat.file :as file]
             [inspector-gadget.rules.read-string :as rule.read-string]
             [inspector-gadget.rules.shell-injection :as rule.shell-injection]
             [inspector-gadget.rules.xxe :as rule.xxe]))
@@ -14,13 +15,16 @@
         result (some #(not (nil? %)) [read-string-result xxe-result shell-injection-result])]
     (when result
       {:filename filename
-       :findings {:xxe         xxe-result
+       :findings {:xxe             xxe-result
                   :shell-injection shell-injection-result
-                  :read-string read-string-result}})))
+                  :read-string     read-string-result}})))
 
 (defn main [source-paths]
   (let [files (->> source-paths
                    (map file/find-clojure-files)
-                   (reduce concat))]
-    (->> (mapv execute-rules files)
-         (filter identity))))
+                   (reduce concat))
+        results (->> (mapv execute-rules files)
+                     (filter identity))
+        results-str (with-out-str (pprint/pprint results))]
+    (spit "vulnerabilities.edn" results-str)
+    (println "Findings saved on file vulnerabilities.edn")))
