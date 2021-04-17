@@ -8,19 +8,22 @@
   (sci/init {:load-fn  (fn [_] "")
              :readers  (fn [_x]
                          identity)
-             :features #{:clj :cljs}}))
+             :features #{:clj}}))
 
 (defn read-it [file]
-  (let [reader (-> file slurp edamame/source-reader)]
-    (loop [init (init)
-           form (sci/parse-next init reader)
-           all-forms []]
-      (if (= :sci.core/eof form)
-        all-forms
-        (let [next-form (sci/parse-next init reader)]
-          (recur init
-                 next-form
-                 (conj all-forms form)))))))
+  (try
+    (let [reader (-> file slurp edamame/source-reader)]
+      (loop [init (init)
+             form (sci/parse-next init reader)
+             all-forms []]
+        (if (= :sci.core/eof form)
+          all-forms
+          (let [next-form (sci/parse-next init reader)]
+            (recur init
+                   next-form
+                   (conj all-forms form))))))
+    (catch Exception e
+      (println (format "Unable to read file %s. %s" (str file) (ex-message e))))))
 
 (defn find-clojure-files [path]
   (->> path

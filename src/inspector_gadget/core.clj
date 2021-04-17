@@ -26,5 +26,6 @@
         results (->> (mapv execute-rules files)
                      (filter identity))
         results-str (with-out-str (pprint/pprint results))]
-    (spit "vulnerabilities.edn" results-str)
-    (println "Findings saved on file vulnerabilities.edn")))
+    (when (seq results)
+      (spit "vulnerabilities.edn" results-str)
+      (println "Findings saved on file vulnerabilities.edn"))))
