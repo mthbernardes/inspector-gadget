@@ -1,31 +1,42 @@
 (ns inspector-gadget.core
   (:require [clojure.pprint :as pprint]
             [inspector-gadget.diplomat.file :as file]
-            [inspector-gadget.rules.read-string :as rule.read-string]
-            [inspector-gadget.rules.shell-injection :as rule.shell-injection]
-            [inspector-gadget.rules.xxe :as rule.xxe]))
+            [inspector-gadget.logic.parser :as parser]
+            [clojure.java.io :as io]))
 
-(defn execute-rules [file]
+(def default-rules
+  (let [files ["clojure-xml-xxe.edn" "read-string.edn" "shell-injection.edn"]]
+    (->> files
+         (map io/resource)
+         (map slurp)
+         (map clojure.edn/read-string))))
+
+(defn execute-rule [code {:keys [checks] :as rule}]
+  (let [checks-result (->> checks
+                           (mapv #(parser/parse-rule-check code %))
+                           (filter identity))]
+    (when (seq checks-result)
+      (assoc rule :findings checks-result))))
+
+(defn scan [file rules]
   (println (str "Searching vulnerabilities on file: " (str file)))
   (let [filename (str file)
         code (file/read-it file)
-        xxe-result (rule.xxe/detect code)
-        read-string-result (rule.read-string/detect code)
-        shell-injection-result (rule.shell-injection/detect code)
-        result (some #(not (nil? %)) [read-string-result xxe-result shell-injection-result])]
-    (when result
+        findings (->> rules
+                      (mapv #(execute-rule code %))
+                      (filter identity))]
+    (when (seq findings)
       {:filename filename
-       :findings {:xxe             xxe-result
-                  :shell-injection shell-injection-result
-                  :read-string     read-string-result}})))
+       :findings findings})))
 
-(defn main [source-paths]
-  (let [files (->> source-paths
+(defn main [source-paths & rules-path]
+  (let [custom-rules (when rules-path (file/read-rules (first rules-path)))
+        rules (concat default-rules custom-rules)
+        files (->> source-paths
                    (map file/find-clojure-files)
                    (reduce concat))
-        results (->> (mapv execute-rules files)
-                     (filter identity))
-        results-str (with-out-str (pprint/pprint results))]
+        results (->> (mapv #(scan % rules) files)
+                     (filter identity))]
     (when (seq results)
-      (spit "vulnerabilities.edn" results-str)
+      (spit "vulnerabilities.edn" (with-out-str (pprint/pprint results)))
       (println "Findings saved on file vulnerabilities.edn"))))

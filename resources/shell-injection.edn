@@ -1,0 +1,16 @@
+{:name        :shell-injection
+ :description "Detect usage of bash -c on clojure.java.shell/sh invoke."
+ :checks      [{:type                  :import-and-usage
+                :ns-name               "clojure.java.shell"
+                :function-name         "sh"
+                :function-spec-builder (fn [namespaced-fn]
+                                         (s/* (s/cat :before (s/* any?)
+                                                :fn-name (fn [symbol] (= namespaced-fn symbol))
+                                                :bash-args (fn [bash-arg]
+                                                             (->> bash-arg
+                                                               (re-matches (re-pattern "sh|bash"))
+                                                               nil?
+                                                               not))
+                                                :bash-c-arg (fn [bash-c-arg]
+                                                              (= "-c" bash-c-arg))
+                                                :args (s/* any?))))}]}
