@@ -1,6 +1,6 @@
 # inspector-gadget
 
-A Leiningen plugin responsible for finding possible vulnerabilities.
+A Leiningen plugin responsible for finding possible vulnerabilities. Totally inspired on borkdude's [grasp](https://github.com/borkdude/grasp).
 
 # Rules
 
