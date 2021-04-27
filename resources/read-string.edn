@@ -1,0 +1,5 @@
+{:name        :read-string
+ :description "Detect usage of vulnerable read-string function."
+ :checks      [{:type          :usage
+                :ns-name       "clojure.core"
+                :function-name "read-string"}]}
