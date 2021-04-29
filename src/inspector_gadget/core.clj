@@ -1,9 +1,9 @@
 (ns inspector-gadget.core
-  (:require [clojure.pprint :as pprint]
-            [inspector-gadget.diplomat.file :as file]
-            [inspector-gadget.logic.parser :as parser]
+  (:require [clojure.edn :as edn]
             [clojure.java.io :as io]
-            [clojure.edn :as edn]))
+            [clojure.pprint :as pprint]
+            [inspector-gadget.diplomat.file :as file]
+            [inspector-gadget.logic.parser :as parser]))
 
 (defn- mapv-filter
   ([f coll]
