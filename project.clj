@@ -7,6 +7,7 @@
             [lein-nsorg "0.2.0"]]
 
   :dependencies [[org.clojure/clojure "1.10.1"]
+                 [org.clojure/data.json "2.2.2"]
                  [borkdude/sci "0.2.4"]
                  [borkdude/edamame "0.0.11-alpha.28"]]
 

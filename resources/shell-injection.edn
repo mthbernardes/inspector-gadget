@@ -1,6 +1,10 @@
-{:name        :shell-injection
- :description "Detect usage of bash -c on clojure.java.shell/sh invoke."
- :checks      [{:type                  :import-and-usage
-                :ns-name               "clojure.java.shell"
-                :function-name         "sh"
-                :fn-regex "($ $lookup-function #\"sh|bash\" \"-c\" $)"}]}
+{:sarif-definition {:id               :shell-injection
+                    :name             "Shell injection"
+                    :shortDescription {:text "Detect usage of bash -c on clojure.java.shell/sh invoke."}
+                    :fullDescription  {:text "Detect usage of bash -c on clojure.java.shell/sh invoke."}
+                    :help             {:text "Detect usage of bash -c on clojure.java.shell/sh invoke."}
+                    :properties       {:precision :medium}}
+ :check           {:type          :import-and-usage
+                   :ns-name       "clojure.java.shell"
+                   :function-name "sh"
+                   :fn-regex      "($ $lookup-function #\"sh|bash\" \"-c\" $)"}}
