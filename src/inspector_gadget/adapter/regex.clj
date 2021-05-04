@@ -48,4 +48,5 @@
 
 (comment
   (def spec (regex->spec "(%fn% #\"sh|bash\" \"-c\" _)" 'shell/sh))
+  (def nested-spec (regex->spec "(test (%fn% #\"sh|bash\" \"-c\" _))" 'shell/sh)) ; TODO: add support to nested expressions
   (s/valid? spec '(shell/sh "sh" "-c" "id")))

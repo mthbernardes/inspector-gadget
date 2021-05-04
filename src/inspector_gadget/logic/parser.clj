@@ -5,26 +5,16 @@
 
 (defmulti parse-rule-check (fn [_ {:keys [type]}] type))
 
-(defmethod parse-rule-check :import-and-usage [code {:keys [ns-name function-name type]}]
-  (if-let [dependency (namespace/find-dependency-require code ns-name)]
-    (let [function (function/build-namespaced-fn-to-lookup dependency function-name)
-          spec (function/build-fn-usage-spec function)
-          findings (function/find-fn-usage code spec)]
-      (when findings
-        (assoc {} :dependency dependency
-                  :findings findings
-                  :type type)))))
-
-(defmethod parse-rule-check :usage [code {:keys [ns-name function-name type]}]
+(defmethod parse-rule-check :usage [code {:keys [ns-name function-name type fn-regex]}]
   (let [function (symbol function-name)
-        spec (function/build-fn-usage-spec function)
+        spec (regex/regex->spec fn-regex function)
         findings (function/find-fn-usage code spec)]
     (when (seq findings)
       (assoc {} :dependency ns-name
                 :findings findings
                 :type type))))
 
-(defmethod parse-rule-check :import-and-usage-custom-spec [code {:keys [ns-name function-name type fn-regex]}]
+(defmethod parse-rule-check :import-and-usage [code {:keys [ns-name function-name type fn-regex]}]
   (if-let [dependency (namespace/find-dependency-require code ns-name)]
     (let [function (function/build-namespaced-fn-to-lookup dependency function-name)
           spec (regex/regex->spec fn-regex function)

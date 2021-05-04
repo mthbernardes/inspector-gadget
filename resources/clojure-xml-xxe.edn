@@ -2,4 +2,5 @@
  :description "Detect usage of vulnerable XML parser on clojure.xml."
  :checks      [{:type          :import-and-usage
                 :ns-name       "clojure.xml"
-                :function-name "parse"}]}
+                :function-name "parse"
+                :fn-regex "(_ %fn% _)"}]}
