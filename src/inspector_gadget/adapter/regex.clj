@@ -2,8 +2,6 @@
   (:require [clojure.spec.alpha :as s])
   (:import (java.util.regex Pattern)))
 
-(defn tap [x] (println x) x)
-
 (defn ^:private read-rule [rule-regex]
   (binding [*read-eval* false]
     (read-string rule-regex)))
