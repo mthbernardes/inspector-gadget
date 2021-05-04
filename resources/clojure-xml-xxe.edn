@@ -3,4 +3,4 @@
  :checks      [{:type          :import-and-usage
                 :ns-name       "clojure.xml"
                 :function-name "parse"
-                :fn-regex "(_ %fn% _)"}]}
+                :fn-regex "($ $lookup-function $)"}]}

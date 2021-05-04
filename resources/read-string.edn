@@ -3,4 +3,4 @@
  :checks      [{:type          :usage
                 :ns-name       "clojure.core"
                 :function-name "read-string"
-                :fn-regex "(_ %fn% _)"}]}
+                :fn-regex "($ $lookup-function $)"}]}

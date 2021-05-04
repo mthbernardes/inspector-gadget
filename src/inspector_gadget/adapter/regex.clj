@@ -18,10 +18,28 @@
 
 (defn ^:private parse-rule-symbol [rule-symbol ns-fn]
   (cond
-    (= rule-symbol '_) `(s/* any?)
+    (= rule-symbol '$) `(s/* any?)
 
-    (= rule-symbol '%fn%) `(fn function-match# [arg#]
-                             (= arg# '~ns-fn))
+    (= rule-symbol '$lookup-function) `(fn function-match# [arg#]
+                                         (= arg# '~ns-fn))
+
+    (= rule-symbol '$keyword) `(partial keyword?)
+
+    (= rule-symbol '$regex) `(partial regex?)
+
+    (= rule-symbol '$map) `(partial map?)
+
+    (= rule-symbol '$vector) `(partial vector?)
+
+    (= rule-symbol '$list) `(partial list?)
+
+    (= rule-symbol '$string) `(partial string?)
+
+    (= rule-symbol '$symbol) `(partial symbol?)
+
+    (= rule-symbol '$number) `(partial number?)
+
+    (= rule-symbol '$number) `(partial number?)
 
     (regex? rule-symbol) `(fn regex-match# [arg#]
                             (->> arg#
@@ -47,6 +65,6 @@
       eval))
 
 (comment
-  (def spec (regex->spec "(%fn% #\"sh|bash\" \"-c\" _)" 'shell/sh))
-  (def nested-spec (regex->spec "(test (%fn% #\"sh|bash\" \"-c\" _))" 'shell/sh)) ; TODO: add support to nested expressions
+  (def spec (regex->spec "($lookup-function #\"sh|bash\" \"-c\" $)" 'shell/sh))
+  (def nested-spec (regex->spec "(test ($lookup-function #\"sh|bash\" \"-c\" $))" 'shell/sh)) ; TODO: add support to nested expressions
   (s/valid? spec '(shell/sh "sh" "-c" "id")))

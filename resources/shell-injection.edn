@@ -3,4 +3,4 @@
  :checks      [{:type                  :import-and-usage
                 :ns-name               "clojure.java.shell"
                 :function-name         "sh"
-                :fn-regex "(_ %fn% #\"sh|bash\" \"-c\" _)"}]}
+                :fn-regex "($ $lookup-function #\"sh|bash\" \"-c\" $)"}]}
