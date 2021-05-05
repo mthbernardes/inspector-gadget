@@ -8,7 +8,7 @@
 
 (defn ^:private rand-keyword []
   (->> (take 10 (repeatedly #(char (+ (rand 26) 65))))
-       (apply str )
+       (apply str)
        keyword))
 
 (defn ^:private regex? [value]

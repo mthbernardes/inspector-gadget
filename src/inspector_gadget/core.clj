@@ -1,10 +1,10 @@
 (ns inspector-gadget.core
-  (:require [clojure.edn :as edn]
+  (:require [clojure.data.json :as json]
+            [clojure.edn :as edn]
             [clojure.java.io :as io]
-            [clojure.data.json :as json]
             [inspector-gadget.diplomat.file :as file]
-            [inspector-gadget.logic.sarif :as sarif]
-            [inspector-gadget.logic.parser :as parser]))
+            [inspector-gadget.logic.parser :as parser]
+            [inspector-gadget.logic.sarif :as sarif]))
 
 (defn- mapv-filter
   ([f coll]
@@ -19,16 +19,17 @@
          (map slurp)
          (map edn/read-string))))
 
-(defn execute-rule [filename code {:keys [sarif-definition] :as rule} results]
-  (let [check-result (parser/parse-rule-check filename code rule)]
-    (when (seq check-result)
+(defn execute-rule [filename code results {:keys [sarif-definition] :as rule}]
+  (let [check-result (parser/parse-rule-check code rule)]
+    (if (seq check-result)
       (let [sarif-result (sarif/build-result filename check-result sarif-definition)]
-        (conj results sarif-result)))))
+        (conj results sarif-result))
+      results)))
 
 (defn scan [file rules]
   (println (str "Searching vulnerabilities on file: " (str file)))
   (let [code (file/read-it file)
-        results (reduce #(execute-rule file code %2 %1) [] rules)]
+        results (reduce #(execute-rule file code %1 %2) [] rules)]
     (when (seq results)
       results)))
 
@@ -40,8 +41,12 @@
         sarif-run (sarif/build-sarif-run rules)]
     (when (seq results)
       (->> results
-           (assoc sarif-run :results )
+           first
+           (assoc sarif-run :results)
            (sarif/build-sarif-report)
            json/write-str
            (spit "result.sarif"))
       (println "Findings saved on file result.sarif"))))
+
+(comment
+  (main ["/home/dpr/dev/projects/vulnerable-test-for-inspector-gadget/src"]))
