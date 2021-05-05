@@ -1,4 +1,4 @@
-(defproject org.clojars.mthbernardes/inspector-gadget "1.0.1-SNAPSHOT"
+(defproject org.clojars.mthbernardes/inspector-gadget "0.2.0-SNAPSHOT"
   :description "Leiningen plugin responsible for finding possible vulnerabilities."
   :url "https://github.com/mthbernardes/inspector-gadget"
 
