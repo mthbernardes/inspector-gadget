@@ -20,8 +20,7 @@
       (when findings
         findings))))
 
-(defmethod parse-rule-check :default [_ rule]
-  (println rule)
+(defmethod parse-rule-check :default [_ _]
   :not-implemented)
 
 (comment
