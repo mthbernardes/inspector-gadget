@@ -4,24 +4,22 @@
   (let [sarif-definition (:sarif-definition rule)]
     (conj rules sarif-definition)))
 
-(defn ^:private build-location [uri locations {:keys [line column]}]
+(defn ^:private build-location [uri {:keys [line column]} {:keys [id shortDescription]}]
   (let [location {:physicalLocation {:artifactLocation {:uri uri}
                                      :region           {:startLine  line
                                                         :startColumn column}}}]
-    (conj locations location)))
+    {:ruleId    id
+     :message   shortDescription
+     :locations [location]}))
 
 (defn build-sarif-run [rules]
   {:tool {:driver {:name           "inspector-gadget"
                    :informationUri "https://github.com/mthbernardes/inspector-gadget"
                    :rules          (reduce build-sarif-rules [] rules)}}})
 
-(defn build-result [filename findings {:keys [id shortDescription]}]
-  (let [uri (->> filename .getPath (format "file://%s"))
-        locations (reduce #(build-location uri %1 %2)
-                          [] findings)]
-    {:ruleId    id
-     :message   shortDescription
-     :locations locations}))
+(defn build-result [filename findings sarif-definition]
+  (let [uri (->> filename .getPath (format "file://%s"))]
+    (map #(build-location uri % sarif-definition) findings)))
 
 (defn build-sarif-report [run]
   {:$schema "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json"

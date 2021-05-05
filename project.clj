@@ -2,6 +2,10 @@
   :description "Leiningen plugin responsible for finding possible vulnerabilities."
   :url "https://github.com/mthbernardes/inspector-gadget"
 
+  :deploy-repositories [["clojars" {:url "https://repo.clojars.org"
+                                    :username :env/CLOJARS_USERNAME
+                                    :password :env/CLOJARS_PASSWORD}]]
+
   :plugins [[lein-cljfmt "0.6.1"]
             [jonase/eastwood "0.3.5"]
             [lein-nsorg "0.2.0"]]

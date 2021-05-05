@@ -29,7 +29,7 @@
 (defn scan [file rules]
   (println (str "Searching vulnerabilities on file: " (str file)))
   (let [code (file/read-it file)
-        results (reduce #(execute-rule file code %1 %2) [] rules)]
+        results (->> rules (reduce #(execute-rule file code %1 %2) []) flatten)]
     (when (seq results)
       results)))
 
