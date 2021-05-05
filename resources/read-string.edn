@@ -1,5 +1,10 @@
-{:name        :read-string
- :description "Detect usage of vulnerable read-string function."
- :checks      [{:type          :usage
-                :ns-name       "clojure.core"
-                :function-name "read-string"}]}
+{:sarif-definition {:id               :read-string
+                    :name             "Read-string"
+                    :shortDescription {:text "Detect usage of vulnerable read-string function."}
+                    :fullDescription  {:text "Detect usage of vulnerable read-string function."}
+                    :help             {:text "Detect usage of vulnerable read-string function."}
+                    :properties       {:precision :medium}}
+ :check           {:type          :usage
+                   :ns-name       "clojure.core"
+                   :function-name "read-string"
+                   :fn-regex      "($ $lookup-function $)"}}

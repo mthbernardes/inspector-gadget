@@ -1,5 +1,10 @@
-{:name        :clojure-xml-xxe
- :description "Detect usage of vulnerable XML parser on clojure.xml."
- :checks      [{:type          :import-and-usage
-                :ns-name       "clojure.xml"
-                :function-name "parse"}]}
+{:sarif-definition {:id               :clojure-xml-xxe
+                    :name             "XXE"
+                    :shortDescription {:text "Detect usage of vulnerable XML parser on clojure.xml."}
+                    :fullDescription  {:text "Detect usage of vulnerable XML parser on clojure.xml."}
+                    :help             {:text "Detect usage of vulnerable XML parser on clojure.xml."}
+                    :properties       {:precision :high}}
+ :check            {:type          :import-and-usage
+                    :ns-name       "clojure.xml"
+                    :function-name "parse"
+                    :fn-regex      "($ $lookup-function $)"}}

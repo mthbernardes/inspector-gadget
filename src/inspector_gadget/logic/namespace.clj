@@ -1,7 +1,7 @@
 (ns inspector-gadget.logic.namespace
   (:require [clojure.spec.alpha :as s]))
 
-(s/def ::namespace ^:private
+(s/def ::namespace
   (s/cat :ns-symbol #(= 'ns %)
          :namespace symbol?
          :body (s/* any?)))
