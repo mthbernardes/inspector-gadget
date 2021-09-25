@@ -1,3 +1,6 @@
+# ARCHIVED
+New project to use as a clojure SAST [clj-holmes](https://github.com/mthbernardes/clj-holmes)
+
 # inspector-gadget
 
 A Leiningen plugin responsible for finding possible vulnerabilities. Totally inspired on borkdude's [grasp](https://github.com/borkdude/grasp).
